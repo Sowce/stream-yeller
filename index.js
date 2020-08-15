@@ -56,3 +56,4 @@ const checkCurrentStreamStatus = async () => {
 };
 
 setInterval(checkCurrentStreamStatus, 60000);
+checkCurrentStreamStatus();
