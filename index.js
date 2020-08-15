@@ -15,15 +15,14 @@ const checkCurrentStreamStatus = async () => {
   );
   const requestData = await request.json();
   console.log(requestData);
-  // Stream isn't live, reset lastStreamState and return
   if (!("stream" in requestData) || "error" in requestData) {
+    console.log("Stream isn't live, reset lastStreamState and return");
     lastStreamState = false;
     return;
   }
 
-  // Stream is live, check if it just came up or if it already was before
   if (!lastStreamState) {
-    // Stream just came up, notify the people
+    console.log("Stream just came up, notify the people");
     const streamData = requestData.stream;
     const embedObject = {
       thumbnail: {
