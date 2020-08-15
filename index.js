@@ -1,4 +1,9 @@
 const fetch = require("node-fetch");
+const not_baiting_heroku = require("http");
+
+not_baiting_heroku
+  .createServer((req, res) => res.end(200))
+  .listen(process.env.PORT || 5000);
 
 let lastStreamState = false;
 
