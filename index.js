@@ -54,8 +54,8 @@ const checkCurrentStreamStatus = async () => {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        body: postObject,
       },
+      body: JSON.stringify(postObject),
     })
       .then(async (response) => {
         console.log(await response.json());
