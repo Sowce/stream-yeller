@@ -56,7 +56,11 @@ const checkCurrentStreamStatus = async () => {
         "content-type": "application/json",
         body: JSON.stringify(postObject),
       },
-    });
+    })
+      .then(async (response) => {
+        console.log(await response.json());
+      })
+      .catch(console.error);
   }
 };
 
