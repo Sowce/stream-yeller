@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 let lastStreamState = false;
 
 const checkCurrentStreamStatus = async () => {
+  console.log("Checking stream status...");
   const request = await fetch(
     `https://api.twitch.tv/kraken/streams/${process.env.followId}`,
     {
@@ -13,7 +14,7 @@ const checkCurrentStreamStatus = async () => {
     }
   );
   const requestData = await request.json();
-
+  console.log(requestData);
   // Stream isn't live, reset lastStreamState and return
   if (!("stream" in requestData) || "error" in requestData) {
     lastStreamState = false;
