@@ -1,0 +1,23 @@
+{
+  "name": "simp4squ1d",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sowce/simp4squ1d.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sowce/simp4squ1d/issues"
+  },
+  "homepage": "https://github.com/Sowce/simp4squ1d#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
+}
