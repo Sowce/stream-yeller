@@ -28,6 +28,7 @@ const checkCurrentStreamStatus = async () => {
 
   if (!lastStreamState) {
     console.log("Stream just came up, notify the people");
+    lastStreamState = true;
     const streamData = requestData.stream;
     const embedObject = {
       thumbnail: {
