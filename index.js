@@ -15,11 +15,7 @@ const checkCurrentStreamStatus = async () => {
   );
   const requestData = await request.json();
   console.log(requestData);
-  if (
-    !("stream" in requestData) ||
-    "error" in requestData ||
-    !requestData.stream
-  ) {
+  if (!requestData.stream || "error" in requestData) {
     console.log("Stream isn't live, reset lastStreamState and return");
     lastStreamState = false;
     return;
