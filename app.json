@@ -1,0 +1,7 @@
+{
+  "name": "Stream Yeller",
+  "description": "Heroku deploy-able bot to notify people of your stream going live automatically on discord",
+  "repository": "https://github.com/Sowce/stream-yeller",
+  "logo": "https://i.imgur.com/mMmIZgz.png",
+  "keywords": ["node", "twitch"]
+}

@@ -1,5 +1,7 @@
 # Twitch Live Notifier for Heroku
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Sowce/stream-yeller)
+
 Deploy to Heroku with these config vars
 
 - `followId`: the twitch user id of the channel you want to have notifications for (not the username)
