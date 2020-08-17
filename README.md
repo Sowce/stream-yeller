@@ -10,3 +10,4 @@ Deploy to Heroku with these config vars
 - `username` _optional_: to override the webhook username
 - `avatarUrl` _optional_: to override the webhook avatar
 - `checkDelay` _optional_: delay in seconds between checks, see it as the maximum of time you want to allow the notification delay to be
+- `message` _optional_: adds a message to the discord notification (up to 2000 characters)
