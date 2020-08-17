@@ -1,20 +1,6 @@
 const fetch = require("node-fetch");
-const fs = require("fs");
 
-const stateFile = "/app/lastStreamState";
-
-const getLastStreamState = () => {
-  if (!fs.existsSync(stateFile)) {
-    fs.writeFileSync(stateFile, "false");
-    return false;
-  }
-
-  return fs.readFileSync(JSON.parse(stateFile));
-};
-
-const setLastStreamState = (value) => {
-  fs.writeFileSync(stateFile, value);
-};
+let lastStreamState = false;
 
 const checkCurrentStreamStatus = async () => {
   console.log("Checking stream status...");
@@ -29,16 +15,15 @@ const checkCurrentStreamStatus = async () => {
   );
   const requestData = await request.json();
   console.log(requestData);
-  console.log(getLastStreamState());
   if (!requestData.stream || "error" in requestData) {
     console.log("Stream isn't live, reset lastStreamState and return");
-    setLastStreamState(false);
+    lastStreamState = false;
     return;
   }
 
-  if (!getLastStreamState()) {
+  if (!lastStreamState) {
     console.log("Stream just came up, notify the people");
-    setLastStreamState(true);
+    lastStreamState = true;
     const streamData = requestData.stream;
     const embedObject = {
       thumbnail: {
