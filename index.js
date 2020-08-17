@@ -45,6 +45,10 @@ const checkCurrentStreamStatus = async () => {
       embeds: [embedObject],
     };
 
+    if (process.env.message) {
+      postObject = { ...postObject, content: process.env.message };
+    }
+
     if (process.env.username) {
       postObject = { ...postObject, username: process.env.username };
     }
