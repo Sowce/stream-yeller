@@ -9,3 +9,4 @@ Deploy to Heroku with these config vars
 - `webhookUrl`: the discord webhook url to the channel you want the notifications posted in
 - `username` _optional_: to override the webhook username
 - `avatarUrl` _optional_: to override the webhook avatar
+- `checkDelay` _optional_: delay in seconds between checks, see it as the maximum of time you want to allow the notification delay to be

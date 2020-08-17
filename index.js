@@ -67,5 +67,24 @@ const checkCurrentStreamStatus = async () => {
   }
 };
 
-setInterval(checkCurrentStreamStatus, 60000);
+let checkDelay = 150000;
+
+let parsedEnvDelay = parseInt(process.env.checkDelay);
+if (!isNaN(parsedEnvDelay)) {
+  if (parsedEnvDelay < 60) {
+    console.error("⛔ checkDelay being under 60 seconds is unreasonable");
+    checkDelay = 60000;
+  } else if (parsedEnvDelay > 600) {
+    console.warn("⚠ checkDelay is set to more than 10 minutes");
+    checkDelay = parseInt(process.env.checkDelay) * 1000;
+  } else {
+    checkDelay = parseInt(process.env.checkDelay) * 1000;
+  }
+} else {
+  console.warn(
+    "⚠ couldn't convert checkDelay to a number, defaulted to 2 minutes 30 seconds"
+  );
+}
+
+setInterval(checkCurrentStreamStatus, checkDelay);
 checkCurrentStreamStatus();
