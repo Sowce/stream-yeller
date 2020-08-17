@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
 
-const stateFile = "./lastStreamState";
+const stateFile = "/app/lastStreamState";
 
 const getLastStreamState = () => {
   if (!fs.existsSync(stateFile)) {
@@ -9,7 +9,7 @@ const getLastStreamState = () => {
     return false;
   }
 
-  fs.readFileSync(JSON.parse(stateFile));
+  return fs.readFileSync(JSON.parse(stateFile));
 };
 
 const setLastStreamState = (value) => {
@@ -29,6 +29,7 @@ const checkCurrentStreamStatus = async () => {
   );
   const requestData = await request.json();
   console.log(requestData);
+  console.log(getLastStreamState());
   if (!requestData.stream || "error" in requestData) {
     console.log("Stream isn't live, reset lastStreamState and return");
     setLastStreamState(false);
