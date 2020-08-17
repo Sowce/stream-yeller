@@ -1,6 +1,20 @@
 const fetch = require("node-fetch");
+const fs = require("fs");
 
-let lastStreamState = false;
+const stateFile = "./lastStreamState";
+
+const getLastStreamState = () => {
+  if (!fs.existsSync(stateFile)) {
+    fs.writeFileSync(stateFile, "false");
+    return false;
+  }
+
+  fs.readFileSync(JSON.parse(stateFile));
+};
+
+const setLastStreamState = (value) => {
+  fs.writeFileSync(stateFile, value);
+};
 
 const checkCurrentStreamStatus = async () => {
   console.log("Checking stream status...");
@@ -17,13 +31,13 @@ const checkCurrentStreamStatus = async () => {
   console.log(requestData);
   if (!requestData.stream || "error" in requestData) {
     console.log("Stream isn't live, reset lastStreamState and return");
-    lastStreamState = false;
+    setLastStreamState(false);
     return;
   }
 
-  if (!lastStreamState) {
+  if (!getLastStreamState()) {
     console.log("Stream just came up, notify the people");
-    lastStreamState = true;
+    setLastStreamState(true);
     const streamData = requestData.stream;
     const embedObject = {
       thumbnail: {
@@ -40,11 +54,18 @@ const checkCurrentStreamStatus = async () => {
       }\n${streamData.channel.status}`,
       color: 6570404,
     };
-    const postObject = {
-      username: "Squ1ddy's Personal Scream Person",
-      avatar_url: "https://i.imgur.com/XJVQxKR.png",
+
+    let postObject = {
       embeds: [embedObject],
     };
+
+    if (process.env.username) {
+      postObject = { ...postObject, username: process.env.username };
+    }
+
+    if (process.env.avatarUrl) {
+      postObject = { ...postObject, avatar_url: process.env.avatarUrl };
+    }
 
     fetch(process.env.webhookUrl, {
       method: "POST",
