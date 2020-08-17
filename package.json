@@ -1,19 +1,19 @@
 {
-  "name": "simp4squ1d",
+  "name": "stream-yeller",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sowce/simp4squ1d.git"
+    "url": "git+https://github.com/Sowce/stream-yeller.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Sowce/simp4squ1d/issues"
+    "url": "https://github.com/Sowce/stream-yeller/issues"
   },
-  "homepage": "https://github.com/Sowce/simp4squ1d#readme",
+  "homepage": "https://github.com/Sowce/stream-yeller#readme",
   "dependencies": {
     "node-fetch": "^2.6.0"
   }
