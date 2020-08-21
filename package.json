@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/Sowce/stream-yeller#readme",
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "twitch": "^4.1.3",
+    "twitch-auth": "^1.0.3"
   }
 }

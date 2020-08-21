@@ -1,21 +1,27 @@
-const fetch = require("node-fetch");
+const { ApiClient } = require("twitch");
+const { StaticAuthProvider } = require("twitch-auth");
 
+const { clientId, accessToken } = process.env;
+
+const authProvider = new StaticAuthProvider(clientId, accessToken);
+const apiClient = new ApiClient({ authProvider });
+
+const getUserID = async (userName) =>
+  await apiClient.helix.users.getUserByName(userName);
+
+let userID = undefined;
 let lastStreamState = false;
+
+const isStreamLive = async (userName) => {
+  if (!userID) userID = await getUserID(userName);
+  return await apiClient.helix.streams.getStreamByUserId(userID);
+};
 
 const checkCurrentStreamStatus = async () => {
   console.log("Checking stream status...");
-  const request = await fetch(
-    `https://api.twitch.tv/kraken/streams/${process.env.followId}`,
-    {
-      headers: {
-        Accept: "application/vnd.twitchtv.v5+json",
-        "Client-ID": process.env.twitchId,
-      },
-    }
-  );
-  const requestData = await request.json();
-  console.log(requestData);
-  if (!requestData.stream || "error" in requestData) {
+  const streamState = await isStreamLive(process.env.streamName);
+
+  if (!streamState) {
     console.log("Stream isn't live, reset lastStreamState and return");
     lastStreamState = false;
     return;
@@ -64,8 +70,8 @@ const checkCurrentStreamStatus = async () => {
       },
       body: JSON.stringify(postObject),
     })
-      .then(async (response) => {
-        console.log(await response.json());
+      .then(async () => {
+        console.log("✔ Discord successfully notified");
       })
       .catch(console.error);
   }
