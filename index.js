@@ -1,4 +1,5 @@
 const { StaticAuthProvider, default: TwitchClient } = require("twitch");
+const fetch = require("node-fetch");
 
 const { clientId, accessToken } = process.env;
 
