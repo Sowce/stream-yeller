@@ -28,6 +28,12 @@ const checkCurrentStreamStatus = async () => {
   }
 
   if (!lastStreamState) {
+    if (new Date() - new Date(streamState.created_at) > 300000) {
+      console.log("Stream has been up for more than 5 mins, don't notify");
+      lastStreamState = true;
+      return;
+    }
+
     console.log("Stream just came up, notify the people");
     lastStreamState = true;
     const streamData = requestData.stream;
