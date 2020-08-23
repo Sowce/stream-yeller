@@ -1,28 +1,40 @@
+const { StaticAuthProvider, default: TwitchClient } = require("twitch");
 const fetch = require("node-fetch");
 
+const { clientId, accessToken } = process.env;
+
+const authProvider = new StaticAuthProvider(clientId, accessToken);
+const apiClient = new TwitchClient({ authProvider });
+
+const getUserID = async (userName) =>
+  await apiClient.helix.users.getUserByName(userName);
+
+let userID = undefined;
 let lastStreamState = false;
 
+const isStreamLive = async (userName) => {
+  if (!userID) userID = await getUserID(userName);
+  return await apiClient.helix.streams.getStreamByUserId(userID);
+};
+
 const checkCurrentStreamStatus = async () => {
-  console.log("Checking stream status...");
-  const request = await fetch(
-    `https://api.twitch.tv/kraken/streams/${process.env.followId}`,
-    {
-      headers: {
-        Accept: "application/vnd.twitchtv.v5+json",
-        "Client-ID": process.env.twitchId,
-      },
-    }
-  );
-  const requestData = await request.json();
-  console.log(requestData);
-  if (!requestData.stream || "error" in requestData) {
-    console.log("Stream isn't live, reset lastStreamState and return");
+  console.log("🔍 Checking...");
+  const streamState = await isStreamLive(process.env.streamName);
+
+  if (!streamState) {
+    console.log("💤 Stream Down");
     lastStreamState = false;
     return;
   }
 
   if (!lastStreamState) {
-    console.log("Stream just came up, notify the people");
+    if (new Date() - new Date(streamState.created_at) > 300000) {
+      console.log("👻 Too late to 🔔");
+      lastStreamState = true;
+      return;
+    }
+
+    console.log("🔔 Stream Up");
     lastStreamState = true;
     const streamData = requestData.stream;
     const embedObject = {
@@ -64,8 +76,8 @@ const checkCurrentStreamStatus = async () => {
       },
       body: JSON.stringify(postObject),
     })
-      .then(async (response) => {
-        console.log(await response.json());
+      .then(async () => {
+        console.log("✔ Discord successfully notified");
       })
       .catch(console.error);
   }
