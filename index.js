@@ -1,8 +1,9 @@
-const TwitchClient = require("twitch").default;
 const fetch = require("node-fetch");
+const TwitchClient = require("twitch").default;
 
 const { clientId, accessToken } = process.env;
-const apiClient = new TwitchClient.withClientCredentials(clientId, accessToken);
+
+const apiClient = TwitchClient.withClientCredentials(clientId, accessToken);
 
 const getUserID = async (userName) =>
   await apiClient.helix.users.getUserByName(userName);
