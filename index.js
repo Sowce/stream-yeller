@@ -1,10 +1,8 @@
-const { StaticAuthProvider, default: TwitchClient } = require("twitch");
+const TwitchClient = require("twitch").default;
 const fetch = require("node-fetch");
 
 const { clientId, accessToken } = process.env;
-
-const authProvider = new StaticAuthProvider(clientId, accessToken);
-const apiClient = new TwitchClient({ authProvider });
+const apiClient = new TwitchClient.withClientCredentials(clientId, accessToken);
 
 const getUserID = async (userName) =>
   await apiClient.helix.users.getUserByName(userName);
