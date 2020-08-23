@@ -18,23 +18,23 @@ const isStreamLive = async (userName) => {
 };
 
 const checkCurrentStreamStatus = async () => {
-  console.log("Checking stream status...");
+  console.log("🔍 Checking...");
   const streamState = await isStreamLive(process.env.streamName);
 
   if (!streamState) {
-    console.log("Stream isn't live, reset lastStreamState and return");
+    console.log("💤 Stream Down");
     lastStreamState = false;
     return;
   }
 
   if (!lastStreamState) {
     if (new Date() - new Date(streamState.created_at) > 300000) {
-      console.log("Stream has been up for more than 5 mins, don't notify");
+      console.log("👻 Too late to 🔔");
       lastStreamState = true;
       return;
     }
 
-    console.log("Stream just came up, notify the people");
+    console.log("🔔 Stream Up");
     lastStreamState = true;
     const streamData = requestData.stream;
     const embedObject = {
