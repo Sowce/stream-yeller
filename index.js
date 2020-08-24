@@ -26,6 +26,7 @@ const checkCurrentStreamStatus = async () => {
     return;
   }
 
+  console.log("👍 Stream Up");
   if (!lastStreamState) {
     if (new Date() - new Date(streamState.created_at) > 300000) {
       console.log("👻 Too late to 🔔");
@@ -33,9 +34,9 @@ const checkCurrentStreamStatus = async () => {
       return;
     }
 
-    console.log("🔔 Stream Up");
+    console.log("🔔 Notify");
     lastStreamState = true;
-    const streamData = requestData.stream;
+    const streamData = streamState;
     const embedObject = {
       thumbnail: {
         url: streamData.channel.logo,
