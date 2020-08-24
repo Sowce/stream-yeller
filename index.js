@@ -36,20 +36,20 @@ const checkCurrentStreamStatus = async () => {
 
     console.log("🔔 Notify");
     lastStreamState = true;
-    const streamData = streamState;
+    console.log(streamState);
     const embedObject = {
       thumbnail: {
-        url: streamData.channel.logo,
+        url: streamState.channel.logo,
       },
       author: {
-        url: streamData.channel.url,
-        name: streamData.channel.url,
+        url: streamState.channel.url,
+        name: streamState.channel.url,
         icon_url: "http://i.imgur.com/yWN9032.png",
       },
-      url: streamData.channel.url,
-      description: `${streamData.channel.display_name} just went live${
-        streamData.game ? ` (${streamData.game})` : ""
-      }\n${streamData.channel.status}`,
+      url: streamState.channel.url,
+      description: `${streamState.channel.display_name} just went live${
+        streamState.game ? ` (${streamState.game})` : ""
+      }\n${streamState.channel.status}`,
       color: 6570404,
     };
 
@@ -69,17 +69,17 @@ const checkCurrentStreamStatus = async () => {
       postObject = { ...postObject, avatar_url: process.env.avatarUrl };
     }
 
-    fetch(process.env.webhookUrl, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(postObject),
-    })
-      .then(async () => {
-        console.log("✔ Discord successfully notified");
-      })
-      .catch(console.error);
+    // fetch(process.env.webhookUrl, {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(postObject),
+    // })
+    //   .then(async () => {
+    //     console.log("✔ Discord successfully notified");
+    //   })
+    //   .catch(console.error);
   }
 };
 
