@@ -8,12 +8,12 @@ const apiClient = TwitchClient.withClientCredentials(clientId, accessToken);
 const getUserID = async (userName) =>
   await apiClient.helix.users.getUserByName(userName);
 
-let userID = undefined;
+let user = undefined;
 let lastStreamState = false;
 
 const isStreamLive = async (userName) => {
-  if (!userID) userID = await getUserID(userName);
-  return await apiClient.helix.streams.getStreamByUserId(userID);
+  if (!user) user = await getUserID(userName);
+  return await apiClient.helix.streams.getStreamByUserId(user);
 };
 
 const getGameName = async (gameId) => {
@@ -32,7 +32,7 @@ const checkCurrentStreamStatus = async () => {
 
   console.log("👍 Stream Up");
   if (!lastStreamState) {
-    if (new Date() - new Date(streamState.started_at) > 300000) {
+    if (new Date() - streamState.startDate > 300000) {
       console.log("👻 Too late to 🔔");
       lastStreamState = true;
       return;
@@ -40,20 +40,20 @@ const checkCurrentStreamStatus = async () => {
 
     console.log("🔔 Notify");
     lastStreamState = true;
-    const streamData = streamState._data;
+    const streamData = streamState;
     const embedObject = {
       thumbnail: {
-        url: streamData.channel.logo,
+        url: (await streamData.getUser()).profilePictureUrl,
       },
       author: {
-        url: `https://twitch.tv/${streamData.user_name}`,
-        name: `https://twitch.tv/${streamData.user_name}`,
+        url: `https://twitch.tv/${streamData.userDisplayName}`,
+        name: `https://twitch.tv/${streamData.userDisplayName}`,
         icon_url: "http://i.imgur.com/yWN9032.png",
       },
-      url: `https://twitch.tv/${streamData.user_name}`,
-      description: `${streamData.user_name} just went live${
-        parseInt(streamData.game_id)
-          ? ` (${await getGameName(streamData.game_id)})`
+      url: `https://twitch.tv/${streamData.userDisplayName}`,
+      description: `${streamData.userDisplayName} just went live${
+        parseInt(streamData.gameId)
+          ? ` (${(await streamData.getGame()).name})`
           : ""
       }\n${streamData.title}`,
       color: 6570404,
