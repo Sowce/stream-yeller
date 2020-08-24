@@ -16,6 +16,10 @@ const isStreamLive = async (userName) => {
   return await apiClient.helix.streams.getStreamByUserId(userID);
 };
 
+const getGameName = async (gameId) => {
+  return (await apiClient.helix.games.getGameById(gameId)).name;
+};
+
 const checkCurrentStreamStatus = async () => {
   console.log("🔍 Checking...");
   const streamState = await isStreamLive(process.env.streamName);
@@ -28,7 +32,7 @@ const checkCurrentStreamStatus = async () => {
 
   console.log("👍 Stream Up");
   if (!lastStreamState) {
-    if (new Date() - new Date(streamState.created_at) > 300000) {
+    if (new Date() - new Date(streamState.started_at) > 300000) {
       console.log("👻 Too late to 🔔");
       lastStreamState = true;
       return;
@@ -36,20 +40,22 @@ const checkCurrentStreamStatus = async () => {
 
     console.log("🔔 Notify");
     lastStreamState = true;
-    console.log(streamState);
+    const streamData = streamState._data;
     const embedObject = {
       thumbnail: {
-        url: streamState.channel.logo,
+        url: streamData.channel.logo,
       },
       author: {
-        url: streamState.channel.url,
-        name: streamState.channel.url,
+        url: `https://twitch.tv/${streamData.user_name}`,
+        name: `https://twitch.tv/${streamData.user_name}`,
         icon_url: "http://i.imgur.com/yWN9032.png",
       },
-      url: streamState.channel.url,
-      description: `${streamState.channel.display_name} just went live${
-        streamState.game ? ` (${streamState.game})` : ""
-      }\n${streamState.channel.status}`,
+      url: `https://twitch.tv/${streamData.user_name}`,
+      description: `${streamData.user_name} just went live${
+        parseInt(streamData.game_id)
+          ? ` (${await getGameName(streamData.game_id)})`
+          : ""
+      }\n${streamData.title}`,
       color: 6570404,
     };
 
