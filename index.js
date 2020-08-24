@@ -75,17 +75,17 @@ const checkCurrentStreamStatus = async () => {
       postObject = { ...postObject, avatar_url: process.env.avatarUrl };
     }
 
-    // fetch(process.env.webhookUrl, {
-    //   method: "POST",
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    //   body: JSON.stringify(postObject),
-    // })
-    //   .then(async () => {
-    //     console.log("✔ Discord successfully notified");
-    //   })
-    //   .catch(console.error);
+    fetch(process.env.webhookUrl, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(postObject),
+    })
+      .then(async () => {
+        console.log("✔ Discord successfully notified");
+      })
+      .catch(console.error);
   }
 };
 
